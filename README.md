@@ -1,4 +1,4 @@
-# ChatBar
+# ElvUI_SimpleChat
 
 A World of Warcraft Chatframe Addon
 
