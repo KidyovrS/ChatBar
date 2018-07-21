@@ -1,12 +1,12 @@
-# ElvUI_SimpleChat
+# SimpleChat
 
 A World of Warcraft Chatframe Addon
 
 修改自 [tytannial/ChatBar](https://github.com/tytannial/ChatBar)
 
-仅支持ElvUI
+支持ElvUI
 
-## Preview
+## Preview w/ ElvUI
 
 ![Preview img](./preview.png)
 
