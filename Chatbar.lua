@@ -12,40 +12,16 @@ local ChatBarOffsetY = 0 -- 相对于默认位置的Y坐标偏移
 -- 输入框位置调整
 local UseTopInput = false -- 启用上方聊天框/如果启用了竖直则为左右 false为下/右 true为上/左
 local UseVertical = false -- 启用竖直聊天框
+
+-- 按钮宽度/间距/字号
+local FrameInterval = 8
+local FrameWidth = 14
+local FontSize = 14
 --[[=============================== END ==============================]]
 local chatFrame = SELECTED_DOCK_FRAME -- 聊天框架
 local inputbox = chatFrame.editBox -- 输入框
 
-COLORSCHEME_BORDER = {0.3, 0.3, 0.3, 1}-- 边框颜色
-
--- 主框架初始化
-local chat = CreateFrame("Frame", "chat", UIParent)
-
-if UseVertical then
-    chat:SetWidth(30)-- 主框体宽度
-    chat:SetHeight(250)-- 主框体高度
-    if UseTopInput then
-        chat:SetPoint("TOPRIGHT", chatFrame, "TOPLEFT", ChatBarOffsetX - 40, ChatBarOffsetY + 25)
-    else
-        chat:SetPoint("TOPLEFT", chatFrame, "TOPRIGHT", ChatBarOffsetX, ChatBarOffsetY + 25)
-    end
-else
-    chat:SetWidth(300)-- 主框体宽度
-    chat:SetHeight(23)-- 主框体高度
-    -- 上方输入框
-    if UseTopInput then
-        inputbox:ClearAllPoints()
-        inputbox:SetPoint("BOTTOMLEFT", chatFrame, "TOPLEFT", 0, 20)
-        inputbox:SetPoint("BOTTOMRIGHT", chatFrame, "TOPRIGHT", 0, 20)
-        chat:SetPoint("TOPLEFT", chatFrame, "BOTTOMLEFT", ChatBarOffsetX, ChatBarOffsetY - 15)
-    else
-        chat:SetPoint("TOPLEFT", chatFrame, "BOTTOMLEFT", ChatBarOffsetX, ChatBarOffsetY - 30)
-    end
-end
-
--- 增加 ElvUI 可移动框体
-local E, L, V, P, G = unpack(ElvUI) 
-E:CreateMover(chat, "ChatbarMover", L["Chat Bar"])
+COLORSCHEME_BORDER = {0.3, 0.3, 0.3, 1} -- 边框颜色
 
 local function ChannelSay_OnClick()
     ChatFrame_OpenChat("/s " .. inputbox:GetText(), chatFrame)
@@ -122,25 +98,54 @@ local ChannelButtons = {
 
 local function CreateChannelButton(data, index)
     local frame = CreateFrame("Button", "frameName", chat)
-    frame:SetWidth(23)-- 按钮宽度
-    frame:SetHeight(23)-- 按钮高度
+    frame:SetWidth(FrameWidth) -- 按钮宽度
+    frame:SetHeight(FrameWidth) -- 按钮高度
     if UseVertical then
-        frame:SetPoint("TOP", chat, "TOP", 0, (1 - index) * 25)-- 锚点 25为间距
+        frame:SetPoint("TOP", chat, "TOP", 0, (1 - index) * 25) -- 锚点 25为间距
     else
-        frame:SetPoint("LEFT", chat, "LEFT", 10 + (index - 1) * 30, 0)-- 锚点 30为间距
+        frame:SetPoint("LEFT", chat, "LEFT", (index - 1) * (FrameInterval + FrameWidth), 0) -- 锚点
     end
-    
+
     frame:RegisterForClicks("AnyUp")
     frame:SetScript("OnClick", data.callback)
     frameText = frame:CreateFontString(data.name .. "Text", "OVERLAY")
-    frameText:SetFont("fonts\\ARHei.ttf", 15, "OUTLINE")-- 字体设置
+    frameText:SetFont("fonts\\ARHei.ttf", FontSize, "OUTLINE") -- 字体设置
     frameText:SetJustifyH("CENTER")
     frameText:SetWidth(25)
     frameText:SetHeight(25)
-    frameText:SetText(data.text)-- 显示的文字
+    frameText:SetText(data.text) -- 显示的文字
     frameText:SetPoint("CENTER", 0, 0)
-    frameText:SetTextColor(data.color[1], data.color[2], data.color[3])-- 文字按钮的颜色
+    frameText:SetTextColor(data.color[1], data.color[2], data.color[3]) -- 文字按钮的颜色
 end
+
+-- 主框架初始化
+local chat = CreateFrame("Frame", "chat", UIParent)
+
+if UseVertical then
+    chat:SetWidth(30) -- 主框体宽度
+    chat:SetHeight(250) -- 主框体高度
+    if UseTopInput then
+        chat:SetPoint("TOPRIGHT", chatFrame, "TOPLEFT", ChatBarOffsetX - 40, ChatBarOffsetY + 25)
+    else
+        chat:SetPoint("TOPLEFT", chatFrame, "TOPRIGHT", ChatBarOffsetX, ChatBarOffsetY + 25)
+    end
+else
+    chat:SetWidth(#ChannelButtons * FrameWidth + (#ChannelButtons - 1) * FrameInterval) -- 主框体宽度
+    chat:SetHeight(FrameWidth) -- 主框体高度
+    -- 上方输入框
+    if UseTopInput then
+        inputbox:ClearAllPoints()
+        inputbox:SetPoint("BOTTOMLEFT", chatFrame, "TOPLEFT", 0, 20)
+        inputbox:SetPoint("BOTTOMRIGHT", chatFrame, "TOPRIGHT", 0, 20)
+        chat:SetPoint("TOPLEFT", chatFrame, "BOTTOMLEFT", ChatBarOffsetX, ChatBarOffsetY - 15)
+    else
+        chat:SetPoint("TOPLEFT", chatFrame, "BOTTOMLEFT", ChatBarOffsetX, ChatBarOffsetY - 30)
+    end
+end
+
+-- 增加 ElvUI 可移动框体
+local E, L, V, P, G = unpack(ElvUI)
+E:CreateMover(chat, "ChatbarMover", L["Chat Bar"])
 
 for i = 1, #ChannelButtons do -- 对非战斗记录聊天框的信息进行处理
     CreateChannelButton(ChannelButtons[i], i)
