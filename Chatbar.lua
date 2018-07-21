@@ -54,21 +54,32 @@ local function ChatEmote_OnClick()
     ToggleEmoteTable()
 end
 
+local function JoinWorldChannel()
+    JoinPermanentChannel("大脚世界频道", nil, 1, 1)
+    ChatFrame_RemoveMessageGroup(chatFrame, "CHANNEL")
+    ChatFrame_AddChannel(chatFrame, "大脚世界频道")
+    print("|cff00d200已加入大脚世界频道|r")
+end
+
+local function LeaveWorldChannel()
+    LeaveChannelByName("大脚世界频道")
+    print("|cffd20000已离开大脚世界频道|r")
+end
+
 local function ChannelWorld_OnClick(self, button)
+    local channel, channelName, _ = GetChannelName("大脚世界频道")
     if button == "RightButton" then
-        local _, channelName, _ = GetChannelName("大脚世界频道")
         if channelName == nil then
-            JoinPermanentChannel("大脚世界频道", nil, 1, 1)
-            ChatFrame_RemoveMessageGroup(chatFrame, "CHANNEL")
-            ChatFrame_AddChannel(chatFrame, "大脚世界频道")
-            print("|cff00d200已加入大脚世界频道|r")
+            JoinWorldChannel()
         else
-            LeaveChannelByName("大脚世界频道")
-            print("|cffd20000已离开大脚世界频道|r")
+            LeaveWorldChannel()
         end
     else
-        local channel, _, _ = GetChannelName("大脚世界频道")
-        ChatFrame_OpenChat("/" .. channel .. " " .. inputbox:GetText(), chatFrame)
+        if channelName == nil then
+            print("未加入大脚世界频道，请右键点击按钮加入。|r")
+        else
+            ChatFrame_OpenChat("/" .. channel .. " " .. inputbox:GetText(), chatFrame)
+        end
     end
 end
 
