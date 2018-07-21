@@ -154,9 +154,11 @@ else
     end
 end
 
--- 增加 ElvUI 可移动框体
-local E, L, V, P, G = unpack(ElvUI)
-E:CreateMover(chat, "ChatbarMover", L["Chat Bar"])
+-- 增加 ElvUI 框体
+if ElvUI ~= nil then
+    local E, L, V, P, G = unpack(ElvUI)
+    E:CreateMover(chat, "ChatbarMover", L["Chat Bar"])
+end
 
 for i = 1, #ChannelButtons do -- 对非战斗记录聊天框的信息进行处理
     CreateChannelButton(ChannelButtons[i], i)

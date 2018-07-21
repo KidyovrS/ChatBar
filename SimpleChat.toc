@@ -1,9 +1,9 @@
 ## Interface: 80000
-## Title: ElvUI SimpleChat
+## Title: SimpleChat
 ## Notes: Simple ChatBar with timesamp and copy function.
 ## Notes-zhCN: 右键【世】可以屏蔽/打开世界频道
 ## Notes-zhTW: 右鍵【世】可以屏蔽/打開世界頻道.
-## RequiredDeps: ElvUI
+## OptionalDependencies: ElvUI
 
 # 聊天选择条
 Chatbar.lua
