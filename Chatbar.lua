@@ -43,6 +43,10 @@ else
     end
 end
 
+-- 增加 ElvUI 可移动框体
+local E, L, V, P, G = unpack(ElvUI) 
+E:CreateMover(chat, "ChatbarMover", L["Chat Bar"])
+
 local function ChannelSay_OnClick()
     ChatFrame_OpenChat("/s " .. inputbox:GetText(), chatFrame)
 end
